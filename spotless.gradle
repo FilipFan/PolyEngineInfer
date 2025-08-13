@@ -1,0 +1,42 @@
+apply plugin: 'com.diffplug.spotless'
+
+spotless {
+    kotlin {
+        target '**/*.kt'
+        ktlint().editorConfigOverride([
+                "ktlint_function_naming_ignore_when_annotated_with": "Composable,Preview",
+                "ij_kotlin_allow_trailing_comma"                   : "true",
+                "ij_kotlin_allow_trailing_comma_on_call_site"      : "true"
+        ])
+        trimTrailingWhitespace()
+        leadingTabsToSpaces()
+        endWithNewline()
+    }
+
+    kotlinGradle {
+        target '*.kts'
+        ktlint()
+        trimTrailingWhitespace()
+        leadingTabsToSpaces()
+        endWithNewline()
+    }
+
+
+    java {
+        target '**/*.java'
+        targetExclude 'build/**'
+        googleJavaFormat()
+        trimTrailingWhitespace()
+        leadingTabsToSpaces()
+        endWithNewline()
+    }
+
+    cpp {
+        target '**/*.cpp', '**/*.h', '**/*.hpp'
+        targetExclude 'external/**', '**/build/**', '.cxx/**'
+        clangFormat('18.1.3').style('Google')
+        trimTrailingWhitespace()
+        leadingTabsToSpaces()
+        endWithNewline()
+    }
+}

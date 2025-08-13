@@ -1,0 +1,177 @@
+package dev.filipfan.polyengineinfer.llamacpp
+
+import android.content.Context
+import android.util.Log
+import androidx.test.ext.junit.runners.AndroidJUnit4
+import androidx.test.platform.app.InstrumentationRegistry
+import dev.filipfan.polyengineinfer.api.LlmInferenceOptions
+import dev.filipfan.polyengineinfer.api.LlmModelFiles
+import kotlinx.coroutines.flow.toList
+import kotlinx.coroutines.runBlocking
+import org.junit.After
+import org.junit.Assert.assertEquals
+import org.junit.Assert.assertNotEquals
+import org.junit.Assert.assertNotNull
+import org.junit.Assert.assertTrue
+import org.junit.BeforeClass
+import org.junit.Test
+import org.junit.runner.RunWith
+import java.io.File
+import java.io.FileOutputStream
+import java.io.IOException
+
+@RunWith(AndroidJUnit4::class)
+class LlamaCppInferenceTest {
+
+    companion object {
+        private const val TAG = "LlamaCppInferenceTest"
+        private lateinit var modelFile: File
+        private lateinit var llamaCppInference: LlamaCppInference
+
+        private fun copyAssetFolder(
+            context: Context,
+            sourceAssetDir: String,
+            destinationDir: File,
+        ) {
+            val assetManager = context.assets
+            val assets = assetManager.list(sourceAssetDir)
+                ?: throw IOException("Failed to list assets in directory: $sourceAssetDir")
+
+            if (!destinationDir.exists()) {
+                destinationDir.mkdirs()
+            }
+
+            for (assetName in assets) {
+                val sourcePath =
+                    if (sourceAssetDir.isEmpty()) assetName else "$sourceAssetDir/$assetName"
+                val destFile = File(destinationDir, assetName)
+
+                val subAssets = assetManager.list(sourcePath)
+
+                if (!subAssets.isNullOrEmpty()) {
+                    copyAssetFolder(context, sourcePath, destFile)
+                } else {
+                    try {
+                        assetManager.open(sourcePath).use { inputStream ->
+                            FileOutputStream(destFile).use { outputStream ->
+                                inputStream.copyTo(outputStream)
+                            }
+                        }
+                    } catch (e: IOException) {
+                        Log.w(
+                            TAG,
+                            "Could not copy asset: $sourcePath. It might be an empty directory.",
+                            e,
+                        )
+                    }
+                }
+            }
+        }
+
+        @BeforeClass
+        @JvmStatic
+        fun setUpClass() {
+            val instrumentationContext = InstrumentationRegistry.getInstrumentation().targetContext
+            val externalDir = instrumentationContext.getExternalFilesDir(null)
+            assertNotNull("External files directory should not be null", externalDir)
+            copyAssetFolder(instrumentationContext, "tiny-mistral-test-GGUF", externalDir!!)
+            modelFile = File(externalDir, "tiny-mistral-test-Q2_K.gguf")
+            llamaCppInference = LlamaCppInference()
+        }
+    }
+
+    @After
+    fun tearDown() {
+        runBlocking {
+            llamaCppInference.unload()
+        }
+    }
+
+    @Test
+    fun testLoadAndGenerateWithDefaultOptions() = runBlocking {
+        llamaCppInference.load(LlmModelFiles(modelPath = modelFile.path), LlmInferenceOptions())
+        val prompt = "Hello"
+        val generatedTokens = llamaCppInference.generate(prompt).toList()
+
+        val resultText = generatedTokens.joinToString("")
+
+        Log.d(TAG, "Default Generation: $resultText")
+        assertTrue("The generated text should not be empty.", resultText.isNotEmpty())
+    }
+
+    @Test
+    fun testGenerationWithCustomMaxLength() = runBlocking {
+        val maxTokens = 5
+        val customOptions = LlmInferenceOptions(maxTokens = maxTokens)
+        llamaCppInference.load(LlmModelFiles(modelPath = modelFile.path), customOptions)
+
+        val prompt = "Hello"
+        val generatedTokens = llamaCppInference.generate(prompt).toList()
+
+        Log.d(
+            TAG,
+            "Custom Max Length (${generatedTokens.size}): ${generatedTokens.joinToString("")}",
+        )
+        assertTrue(
+            "Generated token count should be less than or equal to maxTokens",
+            generatedTokens.size <= maxTokens,
+        )
+    }
+
+    @Test
+    fun testGreedyDecodingWithZeroTemperature() = runBlocking {
+        val greedyOptions = LlmInferenceOptions(maxTokens = 50, temperature = 0.0f)
+        llamaCppInference.load(LlmModelFiles(modelPath = modelFile.path), greedyOptions)
+        val prompt = "Hello"
+
+        val firstResult = llamaCppInference.generate(prompt).toList().joinToString("")
+        val secondResult = llamaCppInference.generate(prompt).toList().joinToString("")
+
+        Log.d(TAG, "Greedy First Run: $firstResult")
+        Log.d(TAG, "Greedy Second Run: $secondResult")
+
+        assertTrue("Greedy results should not be empty", firstResult.isNotEmpty())
+        assertEquals(
+            "Greedy decoding should produce the same result every time",
+            firstResult,
+            secondResult,
+        )
+    }
+
+    @Test
+    fun testNonDeterministicGenerationWithTemperature() = runBlocking {
+        val stochasticOptions = LlmInferenceOptions(maxTokens = 50, temperature = 0.9f, topK = 100)
+        llamaCppInference.load(LlmModelFiles(modelPath = modelFile.path), stochasticOptions)
+        val prompt = "Hello"
+
+        val firstResult = llamaCppInference.generate(prompt).toList().joinToString("")
+        val secondResult = llamaCppInference.generate(prompt).toList().joinToString("")
+
+        Log.d(TAG, "Stochastic First Run: $firstResult")
+        Log.d(TAG, "Stochastic Second Run: $secondResult")
+
+        assertTrue("Stochastic results should not be empty", firstResult.isNotEmpty())
+        assertNotEquals(
+            "Stochastic decoding should produce different results",
+            firstResult,
+            secondResult,
+        )
+    }
+
+    @Test
+    fun testTopKParameterProducesDeterministicResultWhenKIsOne() = runBlocking {
+        // Temperature is non-zero.
+        val topKOptions = LlmInferenceOptions(maxTokens = 50, topK = 1, temperature = 0.9f)
+        llamaCppInference.load(LlmModelFiles(modelPath = modelFile.path), topKOptions)
+        val prompt = "Hello"
+
+        val firstResult = llamaCppInference.generate(prompt).toList().joinToString("")
+        val secondResult = llamaCppInference.generate(prompt).toList().joinToString("")
+
+        Log.d(TAG, "topK=1 First Run: $firstResult")
+        Log.d(TAG, "topK=1 Second Run: $secondResult")
+
+        assertTrue("topK=1 result should not be empty", firstResult.isNotEmpty())
+        assertEquals("topK=1 should produce the same result every time", firstResult, secondResult)
+    }
+}
