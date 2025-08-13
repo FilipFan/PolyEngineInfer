@@ -199,3 +199,19 @@
    WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
    See the License for the specific language governing permissions and
    limitations under the License.
+
+==========================================================================
+ This project includes software from the "llama.cpp" project,
+ which is licensed under the MIT license.
+ Copyright (c) 2023-2024 The ggml authors
+
+ A copy of the license can be found in the file licenses/LICENSE-llamacpp.
+==========================================================================
+
+==========================================================================
+ This project includes software from the "onnxruntime-genai" project,
+ which is licensed under the MIT license.
+ Copyright (c) Microsoft Corporation
+
+ A copy of the license can be found in the file licenses/LICENSE-onnxruntime-genai.
+==========================================================================
