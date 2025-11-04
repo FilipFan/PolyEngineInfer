@@ -36,7 +36,7 @@ android {
     }
 }
 
-val onnxRuntimeGenAiVersion = "0.8.3"
+val onnxRuntimeGenAiVersion = "0.10.0"
 val onnxRuntimeGenAiAarFileName = "onnxruntime-genai-android-$onnxRuntimeGenAiVersion.aar"
 val onnxRuntimeGenAiAarUrl =
     "https://github.com/microsoft/onnxruntime-genai/releases/download/v$onnxRuntimeGenAiVersion/$onnxRuntimeGenAiAarFileName"

@@ -81,8 +81,8 @@ This project utilizes the following inference engines and versions:
 
 - **ONNX:**
 
-  - onnxruntime-genai: [v0.8.3](https://github.com/microsoft/onnxruntime-genai/releases/tag/v0.8.3)
-  - onnxruntime: [v1.22.0](https://github.com/microsoft/onnxruntime/releases/tag/v1.22.0)
+  - onnxruntime-genai: [v0.10.0](https://github.com/microsoft/onnxruntime-genai/releases/tag/v0.10.0)
+  - onnxruntime: [v1.23.2](https://github.com/microsoft/onnxruntime/releases/tag/v1.23.2)
 
 - **ExecuTorch:** [v0.7.0](https://github.com/pytorch/executorch/releases/tag/v0.7.0)
 

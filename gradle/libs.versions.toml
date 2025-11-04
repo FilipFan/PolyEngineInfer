@@ -13,7 +13,7 @@ lifecycleRuntimeCompose = "2.8.3"
 spotless = "7.1.0"
 kotlinxSerializationJson = "1.8.1"
 kotlinxSerializationPlugin = "2.2.0"
-onnxRuntime = "1.22.0"
+onnxRuntime = "1.23.2"
 executorch = "0.7.0"
 mediapipeTasksText = "0.10.26"
 mediapipeTasksGenai = "0.10.25"
@@ -36,6 +36,16 @@ androidx-ui-tooling-preview = { group = "androidx.compose.ui", name = "ui-toolin
 androidx-material3 = { group = "androidx.compose.material3", name = "material3" }
 kotlinx-serialization-json = { group = "org.jetbrains.kotlinx", name = "kotlinx-serialization-json", version.ref = "kotlinxSerializationJson" }
 # ONNX Runtime.
+# The standard build is 'onnxruntime-android'.
+# An alternative build, "onnxruntime-android-qnn", is available.
+# It includes the QNN Execution Provider (EP) but only provides arm64-v8a libraries.
+#
+# To use it, change 'name' below to "onnxruntime-android-qnn".
+#
+# Note: Using the `-qnn` build only makes the QNN EP available,
+# it does NOT force inference to run on QNN.
+#
+# Docs: https://onnxruntime.ai/docs/build/android.html#qnn-execution-provider
 onnxruntime-android = { group = "com.microsoft.onnxruntime", name = "onnxruntime-android", version.ref = "onnxRuntime" }
 # ExecuTorch.
 executorch-android = { group = "org.pytorch", name = "executorch-android", version.ref = "executorch" }
