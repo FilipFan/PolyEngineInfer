@@ -14,7 +14,7 @@ spotless = "7.1.0"
 kotlinxSerializationJson = "1.8.1"
 kotlinxSerializationPlugin = "2.2.0"
 onnxRuntime = "1.23.2"
-executorch = "0.7.0"
+executorch = "1.0.0"
 mediapipeTasksText = "0.10.26"
 mediapipeTasksGenai = "0.10.25"
 
@@ -48,7 +48,10 @@ kotlinx-serialization-json = { group = "org.jetbrains.kotlinx", name = "kotlinx-
 # Docs: https://onnxruntime.ai/docs/build/android.html#qnn-execution-provider
 onnxruntime-android = { group = "com.microsoft.onnxruntime", name = "onnxruntime-android", version.ref = "onnxRuntime" }
 # ExecuTorch.
-executorch-android = { group = "org.pytorch", name = "executorch-android", version.ref = "executorch" }
+# The standard build is "executorch-android".
+# The `-vulkan` build includes Vulkan backend in addition to XnnpackBackend.
+# Docs: https://docs.pytorch.org/executorch/1.0/using-executorch-android.html
+executorch-android = { group = "org.pytorch", name = "executorch-android-vulkan", version.ref = "executorch" }
 # MediaPipe (LiteRT).
 mediapipe-tasks-text = { group = "com.google.mediapipe", name = "tasks-text", version.ref = "mediapipeTasksText" }
 mediapipe-tasks-genai = { group = "com.google.mediapipe", name = "tasks-genai", version.ref = "mediapipeTasksGenai" }

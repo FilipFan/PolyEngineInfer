@@ -84,17 +84,26 @@ This project utilizes the following inference engines and versions:
   - onnxruntime-genai: [v0.10.0](https://github.com/microsoft/onnxruntime-genai/releases/tag/v0.10.0)
   - onnxruntime: [v1.23.2](https://github.com/microsoft/onnxruntime/releases/tag/v1.23.2)
 
-- **ExecuTorch:** [v0.7.0](https://github.com/pytorch/executorch/releases/tag/v0.7.0)
+- **ExecuTorch:** [v1.0.0](https://github.com/pytorch/executorch/releases/tag/v1.0.0)
 
 - **MediaPipe (LiteRT):** [v0.10.26](https://github.com/google-ai-edge/mediapipe/releases/tag/v0.10.26)
+
+## Hardware Acceleration
+
+### GPU
+
+#### ExecuTorch Vulkan Backend
+
+ExecuTorch provides GPU acceleration through its [Vulkan Backend](https://docs.pytorch.org/executorch/1.0/backends/vulkan/vulkan-overview.html).
+
+As detailed in [How ExecuTorch Works](https://docs.pytorch.org/executorch/1.0/intro-how-it-works.html), achieving hardware acceleration requires an offline compilation step. This process targets a specific hardware backend (like Vulkan). The output is a specialized `.pte` model file compiled explicitly for that backend.
+
+The [ExportRecipe_Llama-3.2-1B_Vulkan_Backend_Instruct.ipynb](docs/notebooks/ExportRecipe_Llama-3.2-1B_Vulkan_Backend_Instruct.ipynb) notebook provides a practical example. It shows the commands needed to convert the `Llama-3.2-1B` model into a `.pte` file tailored for the Vulkan backend.
 
 ## Current Limitations
 
 - **Stateless Conversations:** The context of multi-turn conversations is not preserved; each interaction is a new session.
-
 - **Text-Only:** The app does not handle multimodal inputs.
-
-- **No Hardware Acceleration:** The current version does not include optimizations for specific hardware backends.
 
 ## References
 
