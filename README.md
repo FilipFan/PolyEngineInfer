@@ -36,7 +36,7 @@ adb install app-release.apk
 
 The application loads models from the app-specific directory in [external storage](https://developer.android.com/training/data-storage/app-specific#external-access-files). Before selecting a model, you need to first push the model files to this directory (typically `/storage/emulated/0/Android/data/dev.filipfan.polyengineinfer/files`).
 
-The app automatically selects the appropriate inference engine based on the model file's extension and directory structure. You can find pre-converted models for various engines for popular open-source LLMs. For example,  you can download the following models:
+The app automatically selects the appropriate inference engine based on the model file's extension and directory structure. You can find pre-converted models for various engines for popular open-source LLMs. For example, you can download the following models:
 
 - **llama.cpp:** [hugging-quants/Llama-3.2-1B-Instruct-Q8_0-GGUF](https://huggingface.co/hugging-quants/Llama-3.2-1B-Instruct-Q8_0-GGUF/tree/main)
 - **ONNX:** [onnx-community/Llama-3.2-1B-Instruct](https://huggingface.co/onnx-community/Llama-3.2-1B-Instruct/tree/main)
@@ -73,21 +73,6 @@ adb push llama-3.2-1b-instruct-q8_0.gguf /storage/emulated/0/Android/data/dev.fi
 
 Once the files are on your device, you can select the model from the app's settings page and start chatting.
 
-## Dependencies
-
-This project utilizes the following inference engines and versions:
-
-- **llama.cpp:** [b6018](https://github.com/ggml-org/llama.cpp/releases/tag/b6018)
-
-- **ONNX:**
-
-  - onnxruntime-genai: [v0.10.0](https://github.com/microsoft/onnxruntime-genai/releases/tag/v0.10.0)
-  - onnxruntime: [v1.23.2](https://github.com/microsoft/onnxruntime/releases/tag/v1.23.2)
-
-- **ExecuTorch:** [v1.0.0](https://github.com/pytorch/executorch/releases/tag/v1.0.0)
-
-- **MediaPipe (LiteRT):** [v0.10.26](https://github.com/google-ai-edge/mediapipe/releases/tag/v0.10.26)
-
 ## Hardware Acceleration
 
 ### GPU
@@ -110,6 +95,20 @@ LiteRT's GPU acceleration is built on OpenCL (the default) and OpenGL on Android
 >
 > GPU acceleration is not guaranteed for all models. Compatibility depends on the model's specific operators and precision requirements. Please refer to [TFLite on GPU](https://github.com/google-ai-edge/LiteRT/tree/v1.4.0/tflite/delegates/gpu#tflite-on-gpu) for details.
 
+## Dependencies
+
+This project utilizes the following inference engines and versions:
+
+- **llama.cpp:** [b6018](https://github.com/ggml-org/llama.cpp/releases/tag/b6018)
+
+- **ONNX:**
+
+  - onnxruntime-genai: [v0.10.0](https://github.com/microsoft/onnxruntime-genai/releases/tag/v0.10.0)
+  - onnxruntime: [v1.23.2](https://github.com/microsoft/onnxruntime/releases/tag/v1.23.2)
+
+- **ExecuTorch:** [v1.0.0](https://github.com/pytorch/executorch/releases/tag/v1.0.0)
+
+- **MediaPipe (LiteRT):** [v0.10.26](https://github.com/google-ai-edge/mediapipe/releases/tag/v0.10.26)
 
 ## Current Limitations
 
