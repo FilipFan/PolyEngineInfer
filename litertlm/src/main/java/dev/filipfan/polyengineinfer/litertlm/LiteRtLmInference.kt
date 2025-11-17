@@ -123,9 +123,7 @@ class LiteRtLmInference(private val context: Context) : LlmInferenceEngine {
                     }
                     val messageCallback = object : MessageCallback {
                         override fun onMessage(message: Message) {
-                            message.contents.filterIsInstance<Content.Text>().forEach {
-                                trySend(it.text)
-                            }
+                            trySend(message.toString())
                         }
 
                         override fun onDone() {

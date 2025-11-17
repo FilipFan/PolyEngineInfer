@@ -14,7 +14,6 @@ import org.junit.Assert.assertNotEquals
 import org.junit.Assert.assertNotNull
 import org.junit.Assert.assertTrue
 import org.junit.BeforeClass
-import org.junit.Ignore
 import org.junit.Test
 import org.junit.runner.RunWith
 import java.io.File
@@ -119,8 +118,6 @@ class LiteRtLmInferenceTest {
         )
     }
 
-    // TODO: Re-enable this test when the bug is fixed.
-    @Ignore("https://github.com/google-ai-edge/LiteRT-LM/commit/d706fb5acab8145fad5f12ab4ae0d68579083e09")
     @Test
     fun testGreedyDecodingWithZeroTemperature() = runBlocking {
         val greedyOptions = LlmInferenceOptions(maxTokens = 50, temperature = 0.0f)

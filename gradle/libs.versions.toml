@@ -15,7 +15,7 @@ kotlinxSerializationJson = "1.8.1"
 kotlinxSerializationPlugin = "2.2.0"
 onnxRuntime = "1.23.2"
 executorch = "1.0.0"
-litertlm = "0.0.0-alpha05"
+litertlm = "0.0.0-alpha06"
 
 [libraries]
 androidx-core-ktx = { group = "androidx.core", name = "core-ktx", version.ref = "coreKtx" }
@@ -53,7 +53,7 @@ onnxruntime-android = { group = "com.microsoft.onnxruntime", name = "onnxruntime
 executorch-android = { group = "org.pytorch", name = "executorch-android-vulkan", version.ref = "executorch" }
 # LiteRT-LM.
 # See https://github.com/google-ai-edge/LiteRT-LM/tree/main/kotlin#litert-lm-android-api
-litertlm = { group = "com.google.ai.edge.litertlm", name = "litertlm", version.ref = "litertlm" }
+litertlm = { group = "com.google.ai.edge.litertlm", name = "litertlm-android", version.ref = "litertlm" }
 
 [plugins]
 android-application = { id = "com.android.application", version.ref = "agp" }
