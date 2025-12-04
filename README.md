@@ -89,7 +89,7 @@ The [ExportRecipe_Llama-3.2-1B_Vulkan_Backend_Instruct.ipynb](docs/notebooks/Exp
 
 LiteRT uses a just-in-time (JIT) approach for GPU acceleration. Instead of requiring a pre-compiled model, it performs compute graph rewriting and operator mapping for the GPU at runtime. This means a single model file can be used for either CPU or GPU inference.
 
-LiteRT-LM utilizes a [proprietary delegate](https://github.com/google-ai-edge/LiteRT-LM/tree/v0.7.0/prebuilt/android_arm64) to achieve OpenCL-based GPU acceleration. In this application, you can use the settings UI to switch the inference backend between CPU and GPU when a LiteRT model is selected.
+LiteRT-LM utilizes a [proprietary delegate](https://github.com/google-ai-edge/LiteRT-LM/tree/v0.8.0/prebuilt/android_arm64) to achieve OpenCL-based GPU acceleration. In this application, you can use the settings UI to switch the inference backend between CPU and GPU when a LiteRT model is selected.
 
 ## Dependencies
 
@@ -104,7 +104,7 @@ This project utilizes the following inference engines and versions:
 
 - **ExecuTorch:** [v1.0.0](https://github.com/pytorch/executorch/releases/tag/v1.0.0)
 
-- **LiteRT-LM:** [0.0.0-alpha06](https://maven.google.com/web/index.html#com.google.ai.edge.litertlm:litertlm-android:0.0.0-alpha06)
+- **LiteRT-LM:** [v0.8.0](https://github.com/google-ai-edge/LiteRT-LM/releases/tag/v0.8.0)
 
 ## Current Limitations
 

@@ -15,7 +15,7 @@ kotlinxSerializationJson = "1.8.1"
 kotlinxSerializationPlugin = "2.2.0"
 onnxRuntime = "1.23.2"
 executorch = "1.0.0"
-litertlm = "0.0.0-alpha06"
+litertlm = "0.8.0"
 
 [libraries]
 androidx-core-ktx = { group = "androidx.core", name = "core-ktx", version.ref = "coreKtx" }
