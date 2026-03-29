@@ -4,6 +4,7 @@ import android.content.Context
 import android.util.Log
 import androidx.test.ext.junit.runners.AndroidJUnit4
 import androidx.test.platform.app.InstrumentationRegistry
+import com.google.ai.edge.litertlm.LiteRtLmJniException
 import dev.filipfan.polyengineinfer.api.LlmInferenceOptions
 import dev.filipfan.polyengineinfer.api.LlmModelFiles
 import kotlinx.coroutines.flow.toList
@@ -106,16 +107,23 @@ class LiteRtLmInferenceTest {
         liteRtLmInference.load(LlmModelFiles(modelPath = modelFile.path), customOptions)
 
         val prompt = "Hello"
-        val generatedTokens = liteRtLmInference.generate(prompt).toList()
-
-        Log.d(
-            TAG,
-            "Custom Max Length (${generatedTokens.size}): ${generatedTokens.joinToString("")}",
-        )
-        assertTrue(
-            "Generated token count should be less than or equal to maxTokens",
-            generatedTokens.size <= maxTokens,
-        )
+        try {
+            val generatedTokens = liteRtLmInference.generate(prompt).toList()
+            Log.d(
+                TAG,
+                "Custom Max Length (${generatedTokens.size}): ${generatedTokens.joinToString("")}",
+            )
+            assertTrue(
+                "Generated token count should be less than or equal to maxTokens",
+                generatedTokens.size <= maxTokens,
+            )
+        } catch (e: LiteRtLmJniException) {
+            val message = e.message ?: ""
+            assertTrue(
+                "Exception message should indicate token limit exceeded, but got: $message",
+                message.contains("Exceeding the maximum number of tokens allowed"),
+            )
+        }
     }
 
     @Test

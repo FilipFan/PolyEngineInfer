@@ -4,6 +4,7 @@ import android.content.Context
 import android.util.Log
 import com.google.ai.edge.litertlm.Backend
 import com.google.ai.edge.litertlm.Content
+import com.google.ai.edge.litertlm.Contents
 import com.google.ai.edge.litertlm.Conversation
 import com.google.ai.edge.litertlm.ConversationConfig
 import com.google.ai.edge.litertlm.Engine
@@ -35,6 +36,8 @@ class LiteRtLmInference(private val context: Context) : LlmInferenceEngine {
         val options: LlmInferenceOptions,
     )
 
+    private val singleThreadDispatcher = Dispatchers.IO.limitedParallelism(1)
+
     private var instance: LlmModelInstance? = null
 
     init {
@@ -43,7 +46,7 @@ class LiteRtLmInference(private val context: Context) : LlmInferenceEngine {
     }
 
     override suspend fun load(path: LlmModelFiles, options: LlmInferenceOptions) {
-        withContext(Dispatchers.IO) {
+        withContext(singleThreadDispatcher) {
             cleanUp()
             val preferredBackend =
                 when (options.backend) {
@@ -67,7 +70,7 @@ class LiteRtLmInference(private val context: Context) : LlmInferenceEngine {
     }
 
     override suspend fun unload() {
-        withContext(Dispatchers.IO) {
+        withContext(singleThreadDispatcher) {
             cleanUp()
         }
     }
@@ -113,7 +116,7 @@ class LiteRtLmInference(private val context: Context) : LlmInferenceEngine {
         val currentInstance = checkNotNull(instance) { "LiteRT-LM model not loaded." }
 
         return callbackFlow {
-            val job = launch(Dispatchers.IO) {
+            val job = launch(singleThreadDispatcher) {
                 try {
                     // TODO: keep session.
                     val session = createNewSession(currentInstance)
@@ -134,7 +137,7 @@ class LiteRtLmInference(private val context: Context) : LlmInferenceEngine {
                             close(throwable)
                         }
                     }
-                    session.sendMessageAsync(Message.of(contents), messageCallback)
+                    session.sendMessageAsync(Message.user(Contents.of(contents)), messageCallback)
                 } catch (e: Exception) {
                     Log.e(TAG, "Unexpected exception during inferencing", e)
                     close(e)

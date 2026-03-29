@@ -104,7 +104,7 @@ This project utilizes the following inference engines and versions:
 
 - **ExecuTorch:** [v1.0.0](https://github.com/pytorch/executorch/releases/tag/v1.0.0)
 
-- **LiteRT-LM:** [v0.8.0](https://github.com/google-ai-edge/LiteRT-LM/releases/tag/v0.8.0)
+- **LiteRT-LM:** [v0.9.0](https://github.com/google-ai-edge/LiteRT-LM/releases/tag/v0.9.0)
 
 ## Current Limitations
 
