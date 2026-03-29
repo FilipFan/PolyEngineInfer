@@ -47,8 +47,8 @@ class LiteRtLmInference(private val context: Context) : LlmInferenceEngine {
             cleanUp()
             val preferredBackend =
                 when (options.backend) {
-                    LlmInferenceOptions.Backend.CPU -> Backend.CPU
-                    LlmInferenceOptions.Backend.GPU -> Backend.GPU
+                    LlmInferenceOptions.Backend.CPU -> Backend.CPU()
+                    LlmInferenceOptions.Backend.GPU -> Backend.GPU()
                 }
 
             val engine = Engine(
@@ -93,7 +93,7 @@ class LiteRtLmInference(private val context: Context) : LlmInferenceEngine {
 
         val sessionConfig =
             ConversationConfig(
-                systemMessage = null,
+                systemInstruction = null,
                 tools = emptyList(),
                 samplerConfig = SamplerConfig(
                     topK = instance.options.topK,
